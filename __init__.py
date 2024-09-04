@@ -92,24 +92,8 @@ def install_expansion():
 
 
 def download_models():
-    vae_approx_filenames = [
-        ('xlvaeapp.pth', 'https://huggingface.co/lllyasviel/misc/resolve/main/xlvaeapp.pth'),
-        ('vaeapp_sd15.pth',
-         'https://huggingface.co/lllyasviel/misc/resolve/main/vaeapp_sd15.pt'),
-        ('xl-to-v1_interposer-v3.1.safetensors',
-         'https://huggingface.co/lllyasviel/misc/resolve/main/xl-to-v1_interposer-v3.1.safetensors')
-    ]
-
-    for file_name, url in vae_approx_filenames:
-        load_file_from_url(
-            url=url, model_dir="vae_approx", file_name=file_name)
 
     install_expansion()
-    load_file_from_url(
-        url='https://huggingface.co/lllyasviel/misc/resolve/main/fooocus_expansion.bin',
-        model_dir="fooocus_expansion",
-        file_name='pytorch_model.bin'
-    )
 
 
 download_models()
