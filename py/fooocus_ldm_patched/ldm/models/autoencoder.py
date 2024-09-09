@@ -70,14 +70,14 @@ class AbstractAutoencoder(torch.nn.Module):
             self.model_ema.store(self.parameters())
             self.model_ema.copy_to(self)
             if context is not None:
-                # logpy.info(f"{context}: Switched to EMA weights")
+                logpy.info(f"{context}: Switched to EMA weights")
         try:
             yield None
         finally:
             if self.use_ema:
                 self.model_ema.restore(self.parameters())
                 if context is not None:
-                    # logpy.info(f"{context}: Restored training weights")
+                    logpy.info(f"{context}: Restored training weights")
 
     def encode(self, *args, **kwargs) -> torch.Tensor:
         raise NotImplementedError("encode()-method of abstract base class called")

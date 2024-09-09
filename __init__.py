@@ -95,8 +95,10 @@ def download_models():
 
     install_expansion()
 
-
-download_models()
+try:
+    download_models()
+except:
+    pass
 
 __all__ = ['NODE_CLASS_MAPPINGS',
            'NODE_DISPLAY_NAME_MAPPINGS', "WEB_DIRECTORY"]
