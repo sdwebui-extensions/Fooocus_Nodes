@@ -31,9 +31,9 @@ from .py import fooocus_log
 
 
 node_list = [
-    "api",
+    "fooocus_api",
     "fooocusNodes",
-    "prompt"
+    "fooocus_prompt"
 ]
 
 
