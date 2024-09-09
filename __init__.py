@@ -23,11 +23,11 @@ create_folder_and_update_paths("fooocus_expansion")
 create_folder_and_update_paths("inpaint")
 create_folder_and_update_paths("ipadapter")
 
-from .py.modules.model_loader import load_file_from_url
-from .py.modules.config import (
+from .py.fooocus_modules.model_loader import load_file_from_url
+from .py.fooocus_modules.config import (
     path_fooocus_expansion as fooocus_expansion_path,
 )
-from .py import log
+from .py import fooocus_log
 
 
 node_list = [
@@ -68,7 +68,7 @@ def recursive_overwrite(src, dest, ignore=None):
     else:
         if not os.path.exists(dest) or not filecmp.cmp(src, dest):
             shutil.copyfile(src, dest)
-            log.log_node_info(f'Copying file from {src} to {dest}')
+            fooocus_log.log_node_info(f'Copying file from {src} to {dest}')
 
 def get_ext_dir(subpath=None, mkdir=False):
     dir = os.path.dirname(__file__)
@@ -83,7 +83,7 @@ def get_ext_dir(subpath=None, mkdir=False):
 def install_expansion():
     src_dir = get_ext_dir("fooocus_expansion")
     if not os.path.exists(src_dir):
-        log.log_node_error(
+        fooocus_log.log_node_error(
             "prompt_expansion is not exists. Please reinstall the extension.")
         return
     if not os.path.exists(fooocus_expansion_path):

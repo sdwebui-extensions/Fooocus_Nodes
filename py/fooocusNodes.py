@@ -3,25 +3,25 @@ import sys
 
 modules_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(modules_path)
-from modules.patch import PatchSettings, patch_settings, patch_all
+from fooocus_modules.patch import PatchSettings, patch_settings, patch_all
 patch_all()
 import numpy as np
 import folder_paths
 from comfy.samplers import *
-import modules.config
-import modules.flags
-import modules.default_pipeline as pipeline
-import modules.core as core
-from modules.sdxl_styles import apply_style, fooocus_expansion, apply_arrays, random_style_name, get_random_style
-from modules.util import apply_wildcards
-from extras.expansion import safe_str
-import extras.face_crop as face_crop
-import modules.advanced_parameters as advanced_parameters
-from extras.expansion import FooocusExpansion as Expansion
-import extras.preprocessors as preprocessors
-import extras.ip_adapter as ip_adapter
+import fooocus_modules.config
+import fooocus_modules.flags
+import fooocus_modules.default_pipeline as pipeline
+import fooocus_modules.core as core
+from fooocus_modules.sdxl_styles import apply_style, fooocus_expansion, apply_arrays, random_style_name, get_random_style
+from fooocus_modules.util import apply_wildcards
+from fooocus_extras.expansion import safe_str
+import fooocus_extras.face_crop as face_crop
+import fooocus_modules.advanced_parameters as advanced_parameters
+from fooocus_extras.expansion import FooocusExpansion as Expansion
+import fooocus_extras.preprocessors as preprocessors
+import fooocus_extras.ip_adapter as ip_adapter
 from nodes import SaveImage, PreviewImage, MAX_RESOLUTION, NODE_CLASS_MAPPINGS as ALL_NODE_CLASS_MAPPINGS
-from modules.util import (
+from fooocus_modules.util import (
     remove_empty_str,
     HWC3,
     resize_image,
@@ -29,12 +29,12 @@ from modules.util import (
     get_shape_ceil,
     resample_image,
 )
-from libs.utils import easySave
-from modules.upscaler import perform_upscale
-import modules.inpaint_worker as inpaint_worker
-import modules.patch
+from fooocus_libs.utils import easySave
+from fooocus_modules.upscaler import perform_upscale
+import fooocus_modules.inpaint_worker as inpaint_worker
+import fooocus_modules.patch
 from typing import Tuple
-from log import log_node_info
+from fooocus_log import log_node_info
 import random
 import time
 import copy
@@ -110,7 +110,7 @@ class FooocusLoader:
     @classmethod
     def INPUT_TYPES(cls):
         resolution_strings = [
-            f"{width} x {height}" for width, height in modules.config.BASE_RESOLUTIONS
+            f"{width} x {height}" for width, height in fooocus_modules.config.BASE_RESOLUTIONS
         ]
         return {
             "required": {
@@ -135,7 +135,7 @@ class FooocusLoader:
 
     @classmethod
     def get_resolution_strings(cls):
-        return [f"{width} x {height}" for width, height in modules.config.BASE_RESOLUTIONS]
+        return [f"{width} x {height}" for width, height in fooocus_modules.config.BASE_RESOLUTIONS]
 
     def process_resolution(self, resolution: str) -> Tuple[int, int]:
         if resolution == "自定义 x 自定义":
@@ -385,10 +385,10 @@ class FooocusPreKSampler:
 
             inpaint_image = HWC3(inpaint_image)
             log_node_info('Downloading upscale models ...')
-            modules.config.downloading_upscale_model()
+            fooocus_modules.config.downloading_upscale_model()
             if inpaint_parameterized:
                 print('Downloading inpainter ...')
-                inpaint_head_model_path, inpaint_patch_model_path = modules.config.downloading_inpaint_models(
+                inpaint_head_model_path, inpaint_patch_model_path = fooocus_modules.config.downloading_inpaint_models(
                     inpaint_engine)
                 base_model_additional_loras += [(inpaint_patch_model_path, 1.0)]
                 print(f'[Inpaint] Current inpaint model is {inpaint_patch_model_path}')
@@ -830,7 +830,7 @@ class FooocusUpscale:
         all_steps = steps * len(images)
         pbar = comfy.utils.ProgressBar(all_steps)
         log_node_info('Downloading upscale models ...')
-        modules.config.downloading_upscale_model()
+        fooocus_modules.config.downloading_upscale_model()
 
         def callback(step, x0, x, total_steps, y):
             preview_bytes = None
@@ -962,9 +962,9 @@ class FooocusControlnet:
             "required": {
                 "pipe": ("PIPE_LINE",),
                 "image": ("IMAGE",),
-                "cn_type": (modules.flags.cn_list, {"default": modules.flags.default_cn}, ),
-                "cn_stop": ("FLOAT", {"default": modules.flags.default_parameters[modules.flags.default_cn][0], "min": 0.0, "max": 1.0, "step": 0.01},),
-                "cn_weight": ("FLOAT", {"default": modules.flags.default_parameters[modules.flags.default_cn][1], "min": 0.0, "max": 2.0, "step": 0.01},),
+                "cn_type": (fooocus_modules.flags.cn_list, {"default": fooocus_modules.flags.default_cn}, ),
+                "cn_stop": ("FLOAT", {"default": fooocus_modules.flags.default_parameters[fooocus_modules.flags.default_cn][0], "min": 0.0, "max": 1.0, "step": 0.01},),
+                "cn_weight": ("FLOAT", {"default": fooocus_modules.flags.default_parameters[fooocus_modules.flags.default_cn][1], "min": 0.0, "max": 2.0, "step": 0.01},),
                 "skip_cn_preprocess": ("BOOLEAN", {"default": False},),
             },
         }
@@ -979,16 +979,16 @@ class FooocusControlnet:
         self, pipe, image, cn_type, cn_stop, cn_weight, skip_cn_preprocess
     ):
         print("process controlnet...")
-        if cn_type == modules.flags.cn_canny:
-            cn_path = modules.config.downloading_controlnet_canny()
+        if cn_type == fooocus_modules.flags.cn_canny:
+            cn_path = fooocus_modules.config.downloading_controlnet_canny()
             image = image[0].numpy()
             image = (image * 255).astype(np.uint8)
             image = resize_image(
                 HWC3(image), pipe["latent_width"], pipe["latent_height"])
             if not skip_cn_preprocess:
                 image = preprocessors.canny_pyramid(image)
-        if cn_type == modules.flags.cn_cpds:
-            cn_path = modules.config.downloading_controlnet_cpds()
+        if cn_type == fooocus_modules.flags.cn_cpds:
+            cn_path = fooocus_modules.config.downloading_controlnet_cpds()
             image = image[0].numpy()
             image = (image * 255).astype(np.uint8)
             image = resize_image(
@@ -1010,9 +1010,9 @@ class FooocusImagePrompt:
         return {
             "required": {
                 "image": ("IMAGE",),
-                "ip_type": (modules.flags.ip_list, {"default": modules.flags.default_ip}, ),
-                "ip_stop": ("FLOAT", {"default": modules.flags.default_parameters[modules.flags.default_ip][0], "min": 0.0, "max": 1.0, "step": 0.01},),
-                "ip_weight": ("FLOAT", {"default": modules.flags.default_parameters[modules.flags.default_ip][1], "min": 0.0, "max": 2.0, "step": 0.01},),
+                "ip_type": (fooocus_modules.flags.ip_list, {"default": fooocus_modules.flags.default_ip}, ),
+                "ip_stop": ("FLOAT", {"default": fooocus_modules.flags.default_parameters[fooocus_modules.flags.default_ip][0], "min": 0.0, "max": 1.0, "step": 0.01},),
+                "ip_weight": ("FLOAT", {"default": fooocus_modules.flags.default_parameters[fooocus_modules.flags.default_ip][1], "min": 0.0, "max": 2.0, "step": 0.01},),
                 "skip_cn_preprocess": ("BOOLEAN", {"default": False},),
             },
         }
@@ -1026,8 +1026,8 @@ class FooocusImagePrompt:
     def image_prompt(
         self, image, ip_type, ip_stop, ip_weight, skip_cn_preprocess
     ):
-        if ip_type == modules.flags.cn_ip:
-            clip_vision_path, ip_negative_path, ip_adapter_path = modules.config.downloading_ip_adapters(
+        if ip_type == fooocus_modules.flags.cn_ip:
+            clip_vision_path, ip_negative_path, ip_adapter_path = fooocus_modules.config.downloading_ip_adapters(
                 'ip')
             ip_adapter.load_ip_adapter(
                 clip_vision_path, ip_negative_path, ip_adapter_path)
@@ -1038,8 +1038,8 @@ class FooocusImagePrompt:
             task = [image, ip_stop, ip_weight]
             task[0] = ip_adapter.preprocess(
                 image, ip_adapter_path=ip_adapter_path)
-        if ip_type == modules.flags.cn_ip_face:
-            clip_vision_path, ip_negative_path, ip_adapter_face_path = modules.config.downloading_ip_adapters(
+        if ip_type == fooocus_modules.flags.cn_ip_face:
+            clip_vision_path, ip_negative_path, ip_adapter_face_path = fooocus_modules.config.downloading_ip_adapters(
                 'face')
             ip_adapter.load_ip_adapter(
                 clip_vision_path, ip_negative_path, ip_adapter_face_path)
@@ -1100,7 +1100,7 @@ class FooocusInpaint:
                 "image": ("IMAGE",),
                 "inpaint_disable_initial_latent": ("BOOLEAN", {"default": False}),
                 "inpaint_respective_field": ("FLOAT", {"default": 0.618, "min": 0, "max": 1.0, "step": 0.1},),
-                "inpaint_engine": (modules.flags.inpaint_engine_versions, {"default": "v2.6"},),
+                "inpaint_engine": (fooocus_modules.flags.inpaint_engine_versions, {"default": "v2.6"},),
                 "top": ("BOOLEAN", {"default": False}),
                 "bottom": ("BOOLEAN", {"default": False}),
                 "left": ("BOOLEAN", {"default": False}),
@@ -1461,10 +1461,10 @@ class FooocusDescribe:
         img = (img * 255).astype(np.uint8)
         img = HWC3(img)
         if image_type == 'Photo':
-            from extras.interrogate import default_interrogator as default_interrogator_photo
+            from fooocus_extras.interrogate import default_interrogator as default_interrogator_photo
             interrogator = default_interrogator_photo
         else:
-            from extras.wd14tagger import default_interrogator as default_interrogator_anime
+            from fooocus_extras.wd14tagger import default_interrogator as default_interrogator_anime
             interrogator = default_interrogator_anime
         tags = interrogator(img)
         print(tags)
