@@ -30,13 +30,13 @@ def default_interrogator(image_rgb, threshold=0.35, character_threshold=0.85, ex
 
     model_onnx_filename = load_file_from_url(
         url=f'https://huggingface.co/lllyasviel/misc/resolve/main/{model_name}.onnx',
-        model_dir="/stable-diffusion-cache/models/wd14_tagger",
+        model_dir="wd14_tagger",
         file_name=f'{model_name}.onnx',
     )
 
     model_csv_filename = load_file_from_url(
         url=f'https://huggingface.co/lllyasviel/misc/resolve/main/{model_name}.csv',
-        model_dir="/stable-diffusion-cache/models/wd14_tagger",
+        model_dir="wd14_tagger",
         file_name=f'{model_name}.csv',
     )
 

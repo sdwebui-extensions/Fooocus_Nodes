@@ -40,6 +40,7 @@ import time
 import copy
 
 import comfy.samplers
+import torch
 
 MIN_SEED = 0
 MAX_SEED = 2**63 - 1

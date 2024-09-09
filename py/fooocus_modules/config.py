@@ -61,7 +61,7 @@ def downloading_inpaint_models(v):
 
     load_file_from_url(
         url="https://huggingface.co/lllyasviel/fooocus_inpaint/resolve/main/fooocus_inpaint_head.pth",
-        model_dir="/stable-diffusion-cache/models/inpaint",
+        model_dir="inpaint",
         file_name="fooocus_inpaint_head.pth",
     )
     head_file = folder_paths.get_full_path("inpaint", "fooocus_inpaint_head.pth")
@@ -70,7 +70,7 @@ def downloading_inpaint_models(v):
     if v == "v1":
         load_file_from_url(
             url="https://huggingface.co/lllyasviel/fooocus_inpaint/resolve/main/inpaint.fooocus.patch",
-            model_dir="/stable-diffusion-cache/models/inpaint",
+            model_dir="inpaint",
             file_name="inpaint.fooocus.patch",
         )
 
@@ -79,7 +79,7 @@ def downloading_inpaint_models(v):
     if v == "v2.5":
         load_file_from_url(
             url="https://huggingface.co/lllyasviel/fooocus_inpaint/resolve/main/inpaint_v25.fooocus.patch",
-            model_dir="/stable-diffusion-cache/models/inpaint",
+            model_dir="inpaint",
             file_name="inpaint_v25.fooocus.patch",
         )
         patch_file = folder_paths.get_full_path("inpaint", "inpaint_v25.fooocus.patch")
@@ -87,7 +87,7 @@ def downloading_inpaint_models(v):
     if v == "v2.6":
         load_file_from_url(
             url="https://huggingface.co/lllyasviel/fooocus_inpaint/resolve/main/inpaint_v26.fooocus.patch",
-            model_dir="/stable-diffusion-cache/models/inpaint",
+            model_dir="inpaint",
             file_name="inpaint_v26.fooocus.patch",
         )
         patch_file = folder_paths.get_full_path("inpaint", "inpaint_v26.fooocus.patch")
@@ -98,19 +98,19 @@ def downloading_inpaint_models(v):
 def downloading_controlnet_canny():
     load_file_from_url(
         url="https://huggingface.co/lllyasviel/misc/resolve/main/control-lora-canny-rank128.safetensors",
-        model_dir="/stable-diffusion-cache/models/ControlNet/fooocus_cn",
-        file_name="control-lora-canny-rank128.safetensors",
+        model_dir="controlnet",
+        file_name="fooocus_cn/control-lora-canny-rank128.safetensors",
     )
-    return folder_paths.get_full_path("controlnet","control-lora-canny-rank128.safetensors")
+    return folder_paths.get_full_path("controlnet","fooocus_cn/control-lora-canny-rank128.safetensors")
 
 
 def downloading_controlnet_cpds():
     load_file_from_url(
         url="https://huggingface.co/lllyasviel/misc/resolve/main/fooocus_xl_cpds_128.safetensors",
-        model_dir="/stable-diffusion-cache/models/ControlNet/fooocus_cn",
-        file_name="fooocus_xl_cpds_128.safetensors",
+        model_dir="controlnet",
+        file_name="fooocus_cn/fooocus_xl_cpds_128.safetensors",
     )
-    return folder_paths.get_full_path("controlnet","fooocus_xl_cpds_128.safetensors")
+    return folder_paths.get_full_path("controlnet","fooocus_cn/fooocus_xl_cpds_128.safetensors")
 
 
 def downloading_ip_adapters(v):
@@ -120,40 +120,40 @@ def downloading_ip_adapters(v):
 
     load_file_from_url(
         url="https://huggingface.co/lllyasviel/misc/resolve/main/clip_vision_vit_h.safetensors",
-        model_dir="/stable-diffusion-cache/models/annotator/clip_vision",
+        model_dir="clip_vision",
         file_name="clip_vision_vit_h.safetensors",
     )
     results += [folder_paths.get_full_path("clip_vision", "clip_vision_vit_h.safetensors")]
 
     load_file_from_url(
         url="https://huggingface.co/lllyasviel/misc/resolve/main/fooocus_ip_negative.safetensors",
-        model_dir="/stable-diffusion-cache/models/ControlNet/fooocus_cn",
-        file_name="fooocus_ip_negative.safetensors",
+        model_dir="controlnet",
+        file_name="fooocus_cn/fooocus_ip_negative.safetensors",
     )
-    results += [folder_paths.get_full_path("ipadapter", "fooocus_ip_negative.safetensors")]
+    results += [folder_paths.get_full_path("ipadapter", "fooocus_cn/fooocus_ip_negative.safetensors")]
 
     if v == "ip":
         load_file_from_url(
             url="https://huggingface.co/lllyasviel/misc/resolve/main/ip-adapter-plus_sdxl_vit-h.bin",
-            model_dir="/stable-diffusion-cache/models/ControlNet/fooocus_cn",
-            file_name="ip-adapter-plus_sdxl_vit-h.bin",
+            model_dir="controlnet",
+            file_name="fooocus_cn/ip-adapter-plus_sdxl_vit-h.bin",
         )
-        results += [folder_paths.get_full_path("ipadapter", "ip-adapter-plus_sdxl_vit-h.bin")]
+        results += [folder_paths.get_full_path("ipadapter", "fooocus_cn/ip-adapter-plus_sdxl_vit-h.bin")]
 
     if v == "face":
         load_file_from_url(
             url="https://huggingface.co/lllyasviel/misc/resolve/main/ip-adapter-plus-face_sdxl_vit-h.bin",
-            model_dir="/stable-diffusion-cache/models/ControlNet/fooocus_cn",
-            file_name="ip-adapter-plus-face_sdxl_vit-h.bin",
+            model_dir="controlnet",
+            file_name="fooocus_cn/ip-adapter-plus-face_sdxl_vit-h.bin",
         )
-        results += [folder_paths.get_full_path("ipadapter", "ip-adapter-plus-face_sdxl_vit-h.bin")]
+        results += [folder_paths.get_full_path("ipadapter", "fooocus_cn/ip-adapter-plus-face_sdxl_vit-h.bin")]
     return results
 
 
 def downloading_upscale_model():
     load_file_from_url(
         url="https://huggingface.co/lllyasviel/misc/resolve/main/fooocus_upscaler_s409985e5.bin",
-        model_dir="/stable-diffusion-cache/models/upscale_models",
+        model_dir="upscale_models",
         file_name="fooocus_upscaler_s409985e5.bin",
     )
     return folder_paths.get_full_path("upscale_models", "fooocus_upscaler_s409985e5.bin")
