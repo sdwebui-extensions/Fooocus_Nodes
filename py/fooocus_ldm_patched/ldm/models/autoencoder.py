@@ -153,11 +153,11 @@ class AutoencodingEngineLegacy(AutoencodingEngine):
         ddconfig = kwargs.pop("ddconfig")
         super().__init__(
             encoder_config={
-                "target": "ldm_patched.ldm.modules.diffusionmodules.model.Encoder",
+                "target": "fooocus_ldm_patched.ldm.modules.diffusionmodules.model.Encoder",
                 "params": ddconfig,
             },
             decoder_config={
-                "target": "ldm_patched.ldm.modules.diffusionmodules.model.Decoder",
+                "target": "fooocus_ldm_patched.ldm.modules.diffusionmodules.model.Decoder",
                 "params": ddconfig,
             },
             **kwargs,
@@ -221,7 +221,7 @@ class AutoencoderKL(AutoencodingEngineLegacy):
         super().__init__(
             regularizer_config={
                 "target": (
-                    "ldm_patched.ldm.models.autoencoder.DiagonalGaussianRegularizer"
+                    "fooocus_ldm_patched.ldm.models.autoencoder.DiagonalGaussianRegularizer"
                 )
             },
             **kwargs,
