@@ -296,13 +296,13 @@ class FooocusPreKSampler:
             refiner_model_name = "None"
             pipe["sampler_name"] = "lcm"
             pipe["scheduler"] = "lcm"
-            modules.patch.sharpness = 0.0
+            fooocus_modules.patch.sharpness = 0.0
             cfg_scale = guidance_scale = 1.0
             refiner_switch = 1.0
-            modules.patch.adaptive_cfg = 1.0
-            modules.patch.positive_adm_scale = 1.0
-            modules.patch.negative_adm_scale = 1, 0
-            modules.patch.adm_scaler_end = 0.0
+            fooocus_modules.patch.adaptive_cfg = 1.0
+            fooocus_modules.patch.positive_adm_scale = 1.0
+            fooocus_modules.patch.negative_adm_scale = 1, 0
+            fooocus_modules.patch.adm_scaler_end = 0.0
         seed = int(image_seed)
         print(f'[Parameters] Adaptive CFG = {adaptive_cfg}')
         print(f'[Parameters] CLIP Skip = {clip_skip}')

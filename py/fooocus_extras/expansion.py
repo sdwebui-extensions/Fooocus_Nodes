@@ -10,11 +10,6 @@ import torch
 import math
 import comfy.model_management as model_management
 
-from transformers.generation.logits_process import LogitsProcessorList
-from transformers import AutoTokenizer, AutoModelForCausalLM, set_seed
-from fooocus_modules.config import path_fooocus_expansion
-from fooocus_ldm_patched.modules.model_patcher import ModelPatcher
-
 
 # limitation of np.random.seed(), called from transformers.set_seed()
 SEED_LIMIT_NUMPY = 2**32
@@ -36,6 +31,9 @@ def remove_pattern(x, pattern):
 
 class FooocusExpansion:
     def __init__(self):
+        from transformers import AutoTokenizer, AutoModelForCausalLM
+        from fooocus_modules.config import path_fooocus_expansion
+        from fooocus_ldm_patched.modules.model_patcher import FooocusModelPatcher
         self.tokenizer = AutoTokenizer.from_pretrained(path_fooocus_expansion)
 
         positive_words = open(os.path.join(path_fooocus_expansion, 'positive.txt'),
@@ -75,7 +73,7 @@ class FooocusExpansion:
         if use_fp16:
             self.model.half()
 
-        self.patcher = ModelPatcher(self.model, load_device=load_device, offload_device=offload_device)
+        self.patcher = FooocusModelPatcher(self.model, load_device=load_device, offload_device=offload_device)
         print(f'Fooocus Expansion engine loaded for {load_device}, use_fp16 = {use_fp16}.')
 
     @torch.no_grad()
@@ -93,6 +91,8 @@ class FooocusExpansion:
     @torch.no_grad()
     @torch.inference_mode()
     def __call__(self, prompt, seed):
+        from transformers.generation.logits_process import LogitsProcessorList
+        from transformers import set_seed
         if prompt == '':
             return ''
 

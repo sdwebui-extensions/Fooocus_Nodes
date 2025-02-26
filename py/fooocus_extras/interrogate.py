@@ -4,9 +4,6 @@ import comfy.model_management as model_management
 
 from torchvision import transforms
 from torchvision.transforms.functional import InterpolationMode
-from fooocus_modules.model_loader import load_file_from_url
-from fooocus_ldm_patched.modules.model_patcher import ModelPatcher
-from fooocus_extras.BLIP.models.blip import blip_decoder
 
 
 blip_image_eval_size = 384
@@ -23,6 +20,9 @@ class Interrogator:
     @torch.no_grad()
     @torch.inference_mode()
     def interrogate(self, img_rgb):
+        from fooocus_modules.model_loader import load_file_from_url
+        from fooocus_ldm_patched.modules.model_patcher import FooocusModelPatcher
+        from fooocus_extras.BLIP.models.blip import blip_decoder
         if self.blip_model is None:
             filename = load_file_from_url(
                 url='https://huggingface.co/lllyasviel/misc/resolve/main/model_base_caption_capfilt_large.pth',
@@ -44,7 +44,7 @@ class Interrogator:
                 model.half()
                 self.dtype = torch.float16
 
-            self.blip_model = ModelPatcher(model, load_device=self.load_device, offload_device=self.offload_device)
+            self.blip_model = FooocusModelPatcher(model, load_device=self.load_device, offload_device=self.offload_device)
 
         model_management.load_model_gpu(self.blip_model)
 

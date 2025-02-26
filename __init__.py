@@ -27,7 +27,6 @@ add_folder_path_and_extensions("ipadapter", [os.path.join(model_path, "ipadapter
 add_folder_path_and_extensions("inpaint", [os.path.join(model_path, "inpaint")], folder_paths.supported_pt_extensions)
 add_folder_path_and_extensions("fooocus_expansion", [os.path.join(model_path, "fooocus_expansion")], folder_paths.supported_pt_extensions)
 
-from .py.fooocus_modules.model_loader import load_file_from_url
 from .py.fooocus_modules.config import (
     path_fooocus_expansion as fooocus_expansion_path,
 )

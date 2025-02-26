@@ -5,9 +5,9 @@ import comfy.model_management as model_management
 import fooocus_ldm_patched.ldm.modules.attention as attention
 
 from fooocus_extras.resampler import Resampler
-from fooocus_ldm_patched.modules.model_patcher import ModelPatcher
 from fooocus_modules.core import numpy_to_pytorch
 from fooocus_modules.ops import use_patched_ops
+from fooocus_ldm_patched.modules.model_patcher import FooocusModelPatcher
 from fooocus_ldm_patched.modules.ops import manual_cast
 
 
@@ -133,9 +133,9 @@ def load_ip_adapter(clip_vision_path, ip_negative_path, ip_adapter_path):
     ip_adapter.dtype = torch.float16 if use_fp16 else torch.float32
     ip_adapter.to(offload_device, dtype=ip_adapter.dtype)
 
-    image_proj_model = ModelPatcher(model=ip_adapter.image_proj_model, load_device=load_device,
+    image_proj_model = FooocusModelPatcher(model=ip_adapter.image_proj_model, load_device=load_device,
                                     offload_device=offload_device)
-    ip_layers = ModelPatcher(model=ip_adapter.ip_layers, load_device=load_device,
+    ip_layers = FooocusModelPatcher(model=ip_adapter.ip_layers, load_device=load_device,
                              offload_device=offload_device)
 
     ip_adapters[ip_adapter_path] = dict(
