@@ -101,7 +101,7 @@ def pad_tensor_to_shape(tensor: torch.Tensor, new_shape: list[int]) -> torch.Ten
     padded_tensor[new_slices] = tensor[orig_slices]
 
     return padded_tensor
-
+'''
 def calculate_weight_patched(patches, weight, key, intermediate_dtype=torch.float32):
     for p in patches:
         strength = p[0]
@@ -304,6 +304,7 @@ def calculate_weight_patched(patches, weight, key, intermediate_dtype=torch.floa
             weight = old_weight
 
     return weight
+'''
 
 class BrownianTreeNoiseSamplerPatched:
     transform = None
